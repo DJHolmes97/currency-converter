@@ -3,6 +3,7 @@ This is a simple Next.JS application that allows a user to convert currencies, t
 
 ## Planned Features
 - Retrieve list of currencies from API.
+- Setup state management using https://tanstack.com/query/latest
 - Dropdown to choose currency to convert from.
 - Dropdown to choose currency to convert to.
 - Convert from Input.
