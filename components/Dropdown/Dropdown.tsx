@@ -1,0 +1,45 @@
+import * as React from "react"
+import Box from "@mui/material/Box"
+import InputLabel from "@mui/material/InputLabel"
+import MenuItem from "@mui/material/MenuItem"
+import FormControl from "@mui/material/FormControl"
+import Select, { SelectChangeEvent } from "@mui/material/Select"
+
+type DropdownProps = {
+  value: string
+  onChange: (value: string) => void
+  options: Array<{ value: string; label: string }>
+  id: string
+  label: string
+}
+
+export const Dropdown = ({
+  value,
+  onChange,
+  options,
+  id,
+  label,
+}: DropdownProps) => {
+  const handleChange = (event: SelectChangeEvent) => {
+    onChange(event.target.value as string)
+  }
+
+  return (
+    <FormControl fullWidth>
+      <InputLabel id={`${id}-label`}>{label}</InputLabel>
+      <Select
+        labelId={`${id}-label`}
+        id={`${id}-select`}
+        value={value}
+        label={label}
+        onChange={handleChange}
+      >
+        {options?.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  )
+}
