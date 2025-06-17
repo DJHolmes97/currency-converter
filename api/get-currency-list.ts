@@ -8,15 +8,14 @@ export const getCurrencyList = () =>
         "https://currency-converter-api-three.vercel.app/api/get-currency-list",
         {
           headers: {
-            "x-api-token": process.env.API_TOKEN as string,
+            "x-api-token": process.env.NEXT_PUBLIC_API_TOKEN || "",
           },
         }
       )
       if (!response.ok) {
         throw new Error("Network response was not ok")
       }
-      const data = await response.json()
-      return data.body.list
+      return await response.json()
     },
     staleTime: 1000 * 60 * 60, // 1 hour
   })

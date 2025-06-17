@@ -7,16 +7,37 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import { getCurrencyList } from "@/api"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query"
 
 const queryClient = new QueryClient()
 
 const CurrencyConverter = () => {
-  const [selectedFromCurrency, setSelectedFromCurrency] = React.useState("USD")
-  const [selectedToCurrency, setSelectedToCurrency] = React.useState("EUR")
+  const [selectedFromCurrency, setSelectedFromCurrency] = React.useState("usd")
+  const [selectedToCurrency, setSelectedToCurrency] = React.useState("eur")
 
-  const { isPending, error, data, isFetching } = getCurrencyList()
-
+  const { isPending, error, data, isFetching } = useQuery({
+    queryKey: ["currencyList"],
+    queryFn: async () => {
+      const response = await fetch(
+        "https://currency-converter-api-three.vercel.app/api/get-currency-list",
+        {
+          headers: {
+            "x-api-token": process.env.NEXT_PUBLIC_API_TOKEN || "",
+          },
+        }
+      )
+      if (!response.ok) {
+        throw new Error("Network response was not ok")
+      }
+      return await response.json()
+    },
+    staleTime: 1000 * 60 * 60, // 1 hour
+  })
+  console.log(data)
   const currencyList = React.useMemo(() => {
     if (isPending || isFetching) return []
     if (error) {
@@ -24,8 +45,8 @@ const CurrencyConverter = () => {
       return []
     }
     return (
-      data.reduce((acc: any[], curr: any) => {
-        console.log("Currency:", curr)
+      Object.keys(data).reduce((acc: any[], curr: any) => {
+        acc.push({ value: curr, label: `${data[curr]} (${curr})` })
         return acc
       }, []) || []
     )
@@ -38,34 +59,18 @@ const CurrencyConverter = () => {
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, sm: 6, md: 6 }}>
           <Dropdown
-            value={isPending ? selectedFromCurrency : "Loading..."}
+            value={isPending ? selectedFromCurrency : "gbp"}
             onChange={setSelectedFromCurrency}
-            options={
-              isPending
-                ? [
-                    { value: "USD", label: "US Dollar" },
-                    { value: "EUR", label: "Euro" },
-                    { value: "JPY", label: "Japanese Yen" },
-                  ]
-                : [{ value: "loading", label: "Loading..." }]
-            }
+            options={currencyList}
             id="from-currency-dropdown"
             label="Select currency to convert from"
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 6 }}>
           <Dropdown
-            value={isPending ? selectedToCurrency : "Loading..."}
+            value={isPending ? selectedToCurrency : "usd"}
             onChange={setSelectedToCurrency}
-            options={
-              isPending
-                ? [
-                    { value: "USD", label: "US Dollar" },
-                    { value: "EUR", label: "Euro" },
-                    { value: "JPY", label: "Japanese Yen" },
-                  ]
-                : [{ value: "loading", label: "Loading..." }]
-            }
+            options={currencyList}
             id="to-currency-dropdown"
             label="Select currency to convert to"
           />
