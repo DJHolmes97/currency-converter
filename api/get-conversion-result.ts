@@ -1,8 +1,14 @@
-export const getCurrencyList = () => ({
-  queryKey: ["currencyList"],
+type GetConversionResultProps = {
+  to: string
+  from: string
+  amount: string
+}
+
+export const getConversionResult = (props: GetConversionResultProps) => ({
+  queryKey: ["conversionResult"],
   queryFn: async () => {
     const response = await fetch(
-      "https://currency-converter-api-three.vercel.app/api/get-currency-list",
+      `https://currency-converter-api-three.vercel.app/api/convert-currencies?to=${props.to}&from=${props.from}&amount=${props.amount}`,
       {
         headers: {
           "x-api-token": process.env.NEXT_PUBLIC_API_TOKEN || "",

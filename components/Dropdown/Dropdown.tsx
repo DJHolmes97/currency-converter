@@ -1,5 +1,4 @@
 import * as React from "react"
-import Box from "@mui/material/Box"
 import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
@@ -8,9 +7,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select"
 type DropdownProps = {
   value: string
   onChange: (value: string) => void
-  options: Array<{ value: string; label: string }>
+  options: Array<{ value: string; label: string; isDisabled?: boolean }>
   id: string
   label: string
+  isDisabled?: boolean
 }
 
 export const Dropdown = ({
@@ -35,7 +35,11 @@ export const Dropdown = ({
         onChange={handleChange}
       >
         {options?.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
+          <MenuItem
+            disabled={option.isDisabled}
+            key={option.value}
+            value={option.value}
+          >
             {option.label}
           </MenuItem>
         ))}
