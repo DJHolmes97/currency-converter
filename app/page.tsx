@@ -6,6 +6,8 @@ import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
+import Card from "@mui/material/Card"
+
 import { getConversionResult, getCurrencyList } from "@/api"
 import {
   QueryClient,
@@ -13,6 +15,8 @@ import {
   useQuery,
 } from "@tanstack/react-query"
 import Stack from "@mui/material/Stack"
+import IconButton from "@mui/material/IconButton"
+import LoopIcon from "@mui/icons-material/Loop"
 
 const queryClient = new QueryClient()
 
@@ -84,6 +88,15 @@ const CurrencyConverter = () => {
     )
   }, [currencyListResult.error, currencyListResult.data, selectedFromCurrency])
 
+  const handleOnClickSwap = () => {
+    setSelectedFromCurrency((prev) => {
+      const temp = selectedToCurrency
+      setSelectedToCurrency(prev)
+      return temp
+    })
+    setConversionResultData("")
+  }
+
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
     // Allow only numbers and decimal point
@@ -104,58 +117,79 @@ const CurrencyConverter = () => {
 
   return (
     <Container maxWidth="md">
-      <Typography variant="h1" gutterBottom>
-        Currency Converter
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid size={{ xs: 12, sm: 6, md: 6 }} spacing={2}>
-          <Stack spacing={2}>
-            <Dropdown
-              value={selectedFromCurrency}
-              onChange={(value) =>
-                handleCurrencyChange(value, setSelectedFromCurrency)
-              }
-              options={currencyFromList}
-              id="from-currency-dropdown"
-              label="Select currency to convert from"
-            />
-            <Input
-              placeholder="Enter amount to convert"
-              value={amountToConvert}
-              onChange={handleAmountChange}
-            />
-          </Stack>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 6 }}>
-          <Stack spacing={2}>
-            <Dropdown
-              value={selectedToCurrency}
-              onChange={(value) =>
-                handleCurrencyChange(value, setSelectedToCurrency)
-              }
-              options={currencyToList}
-              id="to-currency-dropdown"
-              label="Select currency to convert to"
-            />
-            <Input
-              placeholder="Conversion result"
-              isDisabled
-              value={conversionResultData || ""}
-            />
-          </Stack>
-        </Grid>
-      </Grid>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          sx={{ marginTop: 2 }}
-          onClick={handleOnClickConvert}
+      <Card sx={{ padding: 4 }}>
+        <Typography
+          variant="h1"
+          gutterBottom
+          sx={{ textAlign: "center", fontSize: "4rem" }}
         >
-          Convert
-        </Button>
-      </Box>
+          Currency Converter
+        </Typography>
+        <Grid container spacing={2} sx={{ justifyContent: "space-between" }}>
+          <Grid size={{ xs: 12, sm: 4, md: 4 }} spacing={2}>
+            <Stack spacing={2}>
+              <Dropdown
+                value={selectedFromCurrency}
+                onChange={(value) =>
+                  handleCurrencyChange(value, setSelectedFromCurrency)
+                }
+                options={currencyFromList}
+                id="from-currency-dropdown"
+                label="Select currency to convert from"
+              />
+              <Input
+                placeholder="Enter amount to convert"
+                value={amountToConvert}
+                onChange={handleAmountChange}
+              />
+            </Stack>
+          </Grid>
+          <Grid
+            size={{ xs: 12, sm: 2, md: 2 }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <IconButton
+              onClick={handleOnClickSwap}
+              aria-label="Swap currencies"
+            >
+              <LoopIcon />
+            </IconButton>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 4, md: 4 }}>
+            <Stack spacing={2}>
+              <Dropdown
+                value={selectedToCurrency}
+                onChange={(value) =>
+                  handleCurrencyChange(value, setSelectedToCurrency)
+                }
+                options={currencyToList}
+                id="to-currency-dropdown"
+                label="Select currency to convert to"
+              />
+              <Input
+                placeholder="Conversion result"
+                isDisabled
+                value={conversionResultData || ""}
+              />
+            </Stack>
+          </Grid>
+        </Grid>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            sx={{ marginTop: 2 }}
+            onClick={handleOnClickConvert}
+          >
+            Convert
+          </Button>
+        </Box>
+      </Card>
     </Container>
   )
 }
@@ -164,7 +198,7 @@ export default function Home() {
   return (
     <div>
       <QueryClientProvider client={queryClient}>
-        <main>
+        <main className="bg-gray-100  min-h-screen p-4">
           <CurrencyConverter />
         </main>
       </QueryClientProvider>
