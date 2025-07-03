@@ -10,7 +10,7 @@ type DropdownProps = {
   options: Array<{ value: string; label: string; isDisabled?: boolean }>
   id: string
   label: string
-  isDisabled?: boolean
+  testid?: string
 }
 
 export const Dropdown = ({
@@ -19,9 +19,10 @@ export const Dropdown = ({
   options,
   id,
   label,
+  testid,
 }: DropdownProps) => {
   const handleChange = (event: SelectChangeEvent) => {
-    onChange(event.target.value as string)
+    onChange(event.target.value)
   }
 
   return (
@@ -33,6 +34,7 @@ export const Dropdown = ({
         value={value}
         label={label}
         onChange={handleChange}
+        inputProps={{ "data-testid": testid }}
       >
         {options?.map((option) => (
           <MenuItem

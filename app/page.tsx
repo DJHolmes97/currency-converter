@@ -1,5 +1,5 @@
 "use client"
-import React, { use, useEffect } from "react"
+import React, { useEffect } from "react"
 import Container from "@mui/material/Container"
 import { Dropdown, Input } from "@/components"
 import Grid from "@mui/material/Grid"
@@ -21,8 +21,8 @@ import LoopIcon from "@mui/icons-material/Loop"
 const queryClient = new QueryClient()
 
 const CurrencyConverter = () => {
-  const [selectedFromCurrency, setSelectedFromCurrency] = React.useState("GBP")
-  const [selectedToCurrency, setSelectedToCurrency] = React.useState("USD")
+  const [selectedFromCurrency, setSelectedFromCurrency] = React.useState("")
+  const [selectedToCurrency, setSelectedToCurrency] = React.useState("")
   const [amountToConvert, setAmountToConvert] = React.useState("")
   const [conversionResultData, setConversionResultData] = React.useState("")
   const currencyListResult = useQuery({
@@ -56,6 +56,7 @@ const CurrencyConverter = () => {
       console.error("Error fetching currency list:", currencyListResult.error)
       return []
     }
+
     return (
       Object.keys(currencyListResult.data).reduce((acc: any[], curr: any) => {
         if (!currencyListResult.data[curr]) return acc
@@ -75,6 +76,9 @@ const CurrencyConverter = () => {
       console.error("Error fetching currency list:", currencyListResult.error)
       return []
     }
+
+    setSelectedFromCurrency("GBP")
+    setSelectedToCurrency("USD")
     return (
       Object.keys(currencyListResult.data).reduce((acc: any[], curr: any) => {
         if (!currencyListResult.data[curr]) return acc
@@ -86,7 +90,7 @@ const CurrencyConverter = () => {
         return acc
       }, []) || []
     )
-  }, [currencyListResult.error, currencyListResult.data, selectedFromCurrency])
+  }, [currencyListResult.error, currencyListResult.data])
 
   const handleOnClickSwap = () => {
     setSelectedFromCurrency((prev) => {
@@ -136,6 +140,7 @@ const CurrencyConverter = () => {
                 options={currencyFromList}
                 id="from-currency-dropdown"
                 label="Select currency to convert from"
+                testid="from-currency-dropdown"
               />
               <Input
                 placeholder="Enter amount to convert"
@@ -169,6 +174,7 @@ const CurrencyConverter = () => {
                 options={currencyToList}
                 id="to-currency-dropdown"
                 label="Select currency to convert to"
+                testid="to-currency-dropdown"
               />
               <Input
                 placeholder="Conversion result"

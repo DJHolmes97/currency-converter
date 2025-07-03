@@ -12,7 +12,9 @@ export const getCurrencyList = () => ({
     if (!response.ok) {
       throw new Error("Network response was not ok")
     }
-    return await response.json()
+    const data = await response.json()
+
+    return await data
   },
   staleTime: 1000 * 60 * 60, // 1 hour
 })
