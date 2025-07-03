@@ -1,5 +1,7 @@
 # Currency Converter Portfolio Project
 
+[Currency Converter Website](https://currency-converter-umber-psi.vercel.app/)
+
 ## Overview
 
 This project is a modern, full-stack currency converter web application built as a portfolio piece to showcase proficiency in React, Next.js, TypeScript, and comprehensive testing practices. It demonstrates the ability to design, implement, and test a real-world, interactive web application using current best practices and technologies.
@@ -7,12 +9,14 @@ This project is a modern, full-stack currency converter web application built as
 ## Purpose
 
 The Currency Converter allows users to:
+
 - Select currencies to convert from and to
 - Enter an amount to convert
 - Instantly see the conversion result using up-to-date exchange rates
 - Swap currencies with a single click
 
 This project is intended to demonstrate:
+
 - Clean, maintainable code structure
 - Modern React and Next.js patterns
 - Robust API integration and error handling
@@ -80,6 +84,7 @@ This project is intended to demonstrate:
 ## Why This Project?
 
 This project was built to demonstrate:
+
 - End-to-end skills in modern web development
 - Ability to write clean, maintainable, and well-tested code
 - Experience with real-world API integration and error handling
